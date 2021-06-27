@@ -1,20 +1,45 @@
 import Screen from "./Screen";
 import styled from 'styled-components';
 import { useState} from 'react';
+import InputArea from "./InputArea";
+import { Link } from "react-router-dom";
+import axios from 'axios';
+
 
 export default function Login(){
     const [ email, setEmail ] = useState('');
     const [ password, setPassword ] = useState('');
 
+    function doLogin(event) {
+        event.preventDefault();
+        const body = {
+            email: email,
+            password: password
+        }
+
+        const requisicao = axios.post("http://localhost:4000/", body);
+        requisicao.then(loadUser);
+        requisicao.catch(tratarErro);
+    }
+    function tratarErro(error) {
+        alert("Dados Incorretos!");
+        setEmail("");
+        setPassword("");
+    }   
+    function loadUser(){
+        alert("DEU CERTO");
+    }
 
     return(
         <Screen>
             <InputArea>
                 <Logo>MyWallet</Logo>
+                <form onSubmit={doLogin}>
                 <input placeholder="E-mail" required type="e-mail" value={email} onChange={e => setEmail(e.target.value)}/>
                 <input placeholder="Senha" required type="password" value={password} onChange={e => setPassword(e.target.value)}/>
-                <button>Entrar</button>
-                Primeira vez? Cadastre-se!
+                    <button type="submit">Entrar</button>
+                </form>
+                <Link to="/sign-up" style={{ textDecoration: 'none'}}><LinkText>Primeira vez? Cadastre-se!</LinkText></Link>
             </InputArea>
             
         </Screen>
@@ -31,44 +56,11 @@ const Logo = styled.div`
     margin-bottom: 25px;
 `;
 
-const InputArea = styled.div`
-    width: 100%;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
+const LinkText = styled.div`
     font-family: 'Raleway', sans-serif;
     font-style: normal;
     font-weight: bold;
     font-size: 15px;
     line-height: 18px;
     color: #FFFFFF;
-
-    input{
-        width: 100%;
-        height: 60px;
-        border: none;
-        padding: 18px 0 18px 15px;
-        font-family: 'Raleway', sans-serif;
-        font-style: normal;
-        font-weight: normal;
-        font-size: 20px;
-        line-height: 23px;
-        color: #000000;
-        margin-bottom: 15px;
-        border-radius: 5px;
-    }
-    button{
-        width: 100%;
-        height: 46px;
-        background: #A328D6;
-        border-radius: 5px;
-        border: none;
-        font-family: 'Raleway', sans-serif;
-        font-style: normal;
-        font-weight: bold;
-        font-size: 20px;
-        line-height: 23px;
-        color: #FFFFFF;
-        margin-bottom: 36px;
-    }
 `;
