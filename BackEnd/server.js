@@ -2,6 +2,7 @@ import express from 'express';
 import cors from 'cors';
 import bcrypt from 'bcrypt';
 import pg from 'pg';
+import { v4 as uuid } from 'uuid';
 
 const app = express();
 app.use(cors());
@@ -30,7 +31,11 @@ app.post("/", async (req, res) => {
     const result = await connection.query(`SELECT * FROM users WHERE email = $1`,[email]);
     const user = result.rows[0];
     if(user && bcrypt.compareSync(password, user.password)) {
-        res.sendStatus(200);
+        const token = uuid();
+        await connection.query(`INSERT INTO sessions ("userId", token) VALUES ($1, $2) `, [user.id, token]);
+        console.log({...user, token:token});
+        res.send({...user, token:token});
+
     } else {
         res.sendStatus(401);
     }

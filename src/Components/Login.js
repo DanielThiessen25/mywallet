@@ -1,15 +1,17 @@
 import Screen from "./Screen";
 import styled from 'styled-components';
-import { useState} from 'react';
+import { useState, useContext} from 'react';
 import InputArea from "./InputArea";
-import { Link } from "react-router-dom";
+import { Link, Redirect } from "react-router-dom";
 import axios from 'axios';
+import UserContext from "../contexts/UserContext";
 
 
 export default function Login(){
+    const { user, setUser } = useContext(UserContext);
     const [ email, setEmail ] = useState('');
     const [ password, setPassword ] = useState('');
-
+    const [check, setCheck] = useState('');
     function doLogin(event) {
         event.preventDefault();
         const body = {
@@ -26,8 +28,17 @@ export default function Login(){
         setEmail("");
         setPassword("");
     }   
-    function loadUser(){
+    function loadUser(object){
         alert("DEU CERTO");
+        console.log(object.data);
+        setUser(object.data);
+        setCheck(true);
+    }
+
+    function render(){
+        if(check === true){
+            return (<Redirect to={"/welcome"} />);
+        }
     }
 
     return(
@@ -40,6 +51,7 @@ export default function Login(){
                     <button type="submit">Entrar</button>
                 </form>
                 <Link to="/sign-up" style={{ textDecoration: 'none'}}><LinkText>Primeira vez? Cadastre-se!</LinkText></Link>
+                {render()}
             </InputArea>
             
         </Screen>

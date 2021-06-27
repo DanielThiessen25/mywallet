@@ -2,7 +2,7 @@ import Screen from "./Screen";
 import styled from 'styled-components';
 import { useState} from 'react';
 import InputArea from "./InputArea";
-import { Link } from "react-router-dom";
+import { Link, Redirect } from "react-router-dom";
 import axios from 'axios';
 
 export default function SignUp(){
@@ -10,6 +10,7 @@ export default function SignUp(){
     const [ password, setPassword ] = useState('');
     const [ passwordConfirm, setPasswordConfirm ] = useState('');
     const [ name, setName] = useState('');
+    const [check, setCheck] = useState(false);
 
     function doSignUp(event) {
         event.preventDefault();
@@ -33,8 +34,14 @@ export default function SignUp(){
 
     function loadUser(object) {
         alert("DEU CERTO");
+        setCheck(true);
     }
 
+    function render(){
+        if(check === true){
+            return (<Redirect to={"/"} />);
+        }
+    }
 
     return(
         <Screen>
@@ -49,6 +56,7 @@ export default function SignUp(){
                     <button type="submit">Cadastrar</button>
                 </form>
                 <Link to="/" style={{ textDecoration: 'none'}}><LinkText>Já tem uma conta? Entre agora!</LinkText></Link>  
+                {render()}
             </InputArea>
             
         </Screen>

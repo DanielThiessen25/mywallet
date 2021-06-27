@@ -1,8 +1,13 @@
 import Screen from "./Screen";
 import styled from 'styled-components';
+import UserContext from '../contexts/UserContext';
+import { useState, useContext} from 'react';
+import axios from 'axios';
+import { Link, Redirect } from "react-router-dom";
 import { IoExitOutline, IoAddCircleOutline, IoRemoveCircleOutline } from "react-icons/io5";
 
 export default function Welcome() {
+    const { user, setUser } = useContext(UserContext);
     return (
         <Screen>
             <Heading>
