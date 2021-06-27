@@ -9,13 +9,13 @@ export default function Login(){
 
     return(
         <Screen>
-            <LoginArea>
+            <InputArea>
                 <Logo>MyWallet</Logo>
                 <input placeholder="E-mail" required type="e-mail" value={email} onChange={e => setEmail(e.target.value)}/>
                 <input placeholder="Senha" required type="password" value={password} onChange={e => setPassword(e.target.value)}/>
                 <button>Entrar</button>
                 Primeira vez? Cadastre-se!
-            </LoginArea>
+            </InputArea>
             
         </Screen>
     );
@@ -31,7 +31,7 @@ const Logo = styled.div`
     margin-bottom: 25px;
 `;
 
-const LoginArea = styled.div`
+const InputArea = styled.div`
     width: 100%;
     display: flex;
     flex-direction: column;
@@ -55,6 +55,7 @@ const LoginArea = styled.div`
         line-height: 23px;
         color: #000000;
         margin-bottom: 15px;
+        border-radius: 5px;
     }
     button{
         width: 100%;
