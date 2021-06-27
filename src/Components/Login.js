@@ -4,7 +4,7 @@ import { useState, useContext} from 'react';
 import InputArea from "./InputArea";
 import { Link, Redirect } from "react-router-dom";
 import axios from 'axios';
-import UserContext from "../contexts/UserContext";
+import UserContext from '../contexts/UserContext';
 
 
 export default function Login(){
@@ -37,7 +37,7 @@ export default function Login(){
 
     function render(){
         if(check === true){
-            return (<Redirect to={"/welcome"} />);
+            return (<Redirect to={"/records"} />);
         }
     }
 

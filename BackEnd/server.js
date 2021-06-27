@@ -33,10 +33,26 @@ app.post("/", async (req, res) => {
     if(user && bcrypt.compareSync(password, user.password)) {
         const token = uuid();
         await connection.query(`INSERT INTO sessions ("userId", token) VALUES ($1, $2) `, [user.id, token]);
-        console.log({...user, token:token});
         res.send({...user, token:token});
 
     } else {
+        res.sendStatus(401);
+    }
+});
+
+app.get("/records", async (req, res) => {
+    const authorization = req.headers['authorization'];
+    const token = authorization?.replace('Bearer ', '');
+  
+    if(!token) return res.sendStatus(401);
+
+    const result = await connection.query(`SELECT * FROM sessions JOIN users ON sessions."userId" = users.id WHERE sessions.token = $1`, [token]);
+    const user = result.rows[0];
+    if(user){
+        const call = await connection.query(`SELECT * FROM records WHERE records."userId" = $1`, [user.userId]);
+        const recordsList = call.rows;
+        res.send(recordsList);
+    }else{
         res.sendStatus(401);
     }
 });
