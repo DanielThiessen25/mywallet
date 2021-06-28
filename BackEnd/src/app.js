@@ -1,24 +1,13 @@
 import express from 'express';
 import cors from 'cors';
 import bcrypt from 'bcrypt';
-import pg from 'pg';
 import { v4 as uuid } from 'uuid';
 import dayjs from 'dayjs';
+import connection from './database.js';
 
 const app = express();
 app.use(cors());
 app.use(express.json());
-
-const databaseConfig = {
-    user: 'postgres',
-    password: 'senha',
-    database: 'mywallet',
-    host: 'localhost',
-    port: 5432
-};
-
-const { Pool } = pg;
-const connection = new Pool(databaseConfig);
 
 app.post("/sign-up", async (req, res) => {
     const { name, email, password } = req.body;
@@ -61,11 +50,12 @@ app.get("/records", async (req, res) => {
 app.post("/nova-entrada", async (req, res) => {
     const authorization = req.headers['authorization'];
     const token = authorization?.replace('Bearer ', '');
-
+    console.log(token);
     if (!token) return res.sendStatus(401);
 
     const result = await connection.query(`SELECT * FROM sessions JOIN users ON sessions."userId" = users.id WHERE sessions.token = $1`, [token]);
     const user = result.rows[0];
+    console.log(user);
     if (user) {
         const { value, description } = req.body;
         let now = dayjs();
@@ -100,4 +90,4 @@ app.post("/nova-saida", async (req, res) => {
 
 });
 
-app.listen(4000);
+export default app;
