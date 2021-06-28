@@ -20,18 +20,49 @@ export default function Records() {
         const requisicao = axios.get("http://localhost:4000/records", config);
 
         requisicao.then(resposta => {
-            console.log(resposta.data);
             setList(resposta.data);
         });
     }, []);
 
     function printRecords(){
-        console.log(list);
         if(list != null && list.length != 0){
-            return(<p>IMPLEMENTAR</p>);
+            console.log(list);
+            return(
+                list.map(item => 
+                    <Item>
+                    <h3>{item.date}</h3>
+                    <h2>{item.description}</h2>
+                    {(item.operation === 'in')? 
+                    <h4>{item.value}</h4>
+                    : <h5>{item.value}</h5>}
+                    </Item>
+                )
+                );
         }
         else{
             return(<p>Não há registros de entrada ou saída</p>);
+        }
+    }
+
+    function sumRecords(){
+        let sum = 0;
+        if(list != null && list.length != 0){
+            for(let i =0; i<list.length; i++){
+                if(list[i].operation === 'in'){
+                    sum = sum +  parseFloat(list[i].value);
+                    console.log(sum);
+                }
+                else{
+                    sum = sum - list[i].value;
+                    console.log(sum);
+                }
+            }
+            if(sum>=0){
+                return(<h4>{sum.toFixed(2)}</h4>);
+            }
+            else{
+                return(<h5>{sum.toFixed(2)}</h5>);
+            }
         }
     }
 
@@ -44,6 +75,15 @@ export default function Records() {
             </Heading>
             <RecordsArea>
                 {printRecords()}
+                {(list != null && list.length != 0)?
+                <>
+                <Fill></Fill>
+                <Total>
+                <h2>SALDO</h2>
+                <h4>{sumRecords()}</h4>
+                </Total>
+                </>
+                :''}
             </RecordsArea>
             <OptionsContainer>
                 <Link  to="/nova-entrada" style={{ textDecoration: 'none'}}>
@@ -52,7 +92,7 @@ export default function Records() {
                         <p>Nova entrada</p>
                     </Option>
                 </Link>
-                <Link to="/nova-entrada" style={{ textDecoration: 'none'}}>
+                <Link to="/nova-saida" style={{ textDecoration: 'none'}}>
                     <Option>
                         <IoRemoveCircleOutline color="#FFFFFF" size="1.8em" />
                         <p>Nova saída</p>
@@ -82,6 +122,7 @@ const Heading = styled.div`
 `;
 
 const RecordsArea = styled.div`
+    padding: 30px 12px 12px 12px;
     width: 100%;
     height: 100%;
     border-radius: 5px;
@@ -134,4 +175,67 @@ const Option = styled.div`
         color: #FFFFFF;
 
     }
+`;
+
+const Item = styled.div`
+    width: 100%;
+    margin-bottom: 20px;
+    display: flex;
+    flex-direction: row;
+    position: relative;
+    font-family: 'Raleway', sans-serif;
+    font-style: normal;
+    font-weight: normal;
+    font-size: 16px;
+    line-height: 19px;
+    h2{
+        color: #000000;
+    }
+    h3{
+        color:#C6C6C6;
+        margin-right: 7px;
+    }
+
+    h4{
+        position:absolute;
+        right: 0px;
+        color: #03AC00;
+    }
+    h5{
+        position:absolute;
+        right: 0px;
+        color: #C70000;
+    }
+
+`;
+
+const Total = styled.div`
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    position: relative;
+    font-family: 'Raleway', sans-serif;
+    font-style: normal;
+    font-weight: bold;
+    font-size: 17px;
+    line-height: 20px;
+    h2{
+        color: #000000;
+    }
+    h4{
+        position:absolute;
+        right: 0px;
+        color: #03AC00;
+    }
+    h5{
+        position:absolute;
+        right: 0px;
+        color: #C70000;
+    }
+
+`;
+
+const Fill = styled.div`
+    width: 100%;
+    height: 100%;
 `;

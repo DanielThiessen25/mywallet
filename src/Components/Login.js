@@ -12,6 +12,7 @@ export default function Login(){
     const [ email, setEmail ] = useState('');
     const [ password, setPassword ] = useState('');
     const [check, setCheck] = useState('');
+    
     function doLogin(event) {
         event.preventDefault();
         const body = {
