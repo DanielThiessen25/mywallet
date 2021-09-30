@@ -76,9 +76,7 @@ Authorization Header: "Bearer " + userId
 {
   value: 23.00,
   email: "Your description"
-}
-+
-Authorization Header: "Bearer " + userId
+} - Authorization Header: "Bearer " + userId
 
 ### New Outcome:
 
@@ -88,6 +86,4 @@ Authorization Header: "Bearer " + userId
 {
   value: 23.00,
   email: "Your description"
-}
-+
-Authorization Header: "Bearer " + userId
+} - Authorization Header: "Bearer " + userId
